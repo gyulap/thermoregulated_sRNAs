@@ -38,7 +38,7 @@ while read line
 
 #Downloading raw sequences from the SRA database, renaming them by the sample name and placing them into the appropriate directory.
 
-    fastq-dump --gzip $Run -X 5 -Z > $rawname
+    fastq-dump --gzip $Run -Z > $rawname
 
 #Trimming the Illumina TruSeq Small RNA 3' adapter (RA3) and doing some filtering steps.
 #A quality check is performed before and after read processing using FastQC.
