@@ -1,6 +1,6 @@
 setwd("./RNA-seq/kallisto_results")
 
-library("sleuth")
+library(sleuth)
 base_dir = "./RNA-seq/kallisto_results/kallisto_files"
 #ann = read.table("/home/gyulap/Dokumentumok/Arabidopsis/Gyuri_temperature/kallisto/TAIR10_functional_descriptions_20140331.txt",
 #                 sep="\t", header = F, fill = T, row.names = NULL, quote = "", stringsAsFactors = F)
@@ -18,6 +18,13 @@ s2c = data.frame("sample" = sample_id,
 so = sleuth_prep(s2c, ~ group,
                  #target_mapping = ann,
                  extra_bootstrap_summary = T, read_bootstrap_tpm = T)
+
+stat = summary(so)
+stat = stat[, c(1,3,2)]
+colnames(stat) = c("", "Passed", "Mapped")
+stat$Unmapped = stat$Passed - stat$Mapped
+write.table(stat, file="kallisto_stat.txt", sep="\t", row.names = F, quote = F)
+
 library(reshape2)
 kt = kallisto_table(so, normalized = T, use_filtered = F)
 kt2 = dcast(kt, target_id ~ sample, value.var = "tpm")
