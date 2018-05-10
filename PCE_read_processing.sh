@@ -38,6 +38,8 @@ while read line
 
 #Downloading raw sequences from the SRA database, renaming them by the sample name and placing them into the appropriate directory.
 
+    echo "Downloading $Run ${Sample_Name}.fastq.gz from SRA"
+
     fastq-dump --gzip $Run -Z > $rawname
 
 #Trimming the Illumina TruSeq Small RNA 3' adapter (RA3) and doing some filtering steps.
