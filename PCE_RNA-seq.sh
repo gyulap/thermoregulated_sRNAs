@@ -3,7 +3,7 @@
 url='https://www.arabidopsis.org/download_files/Sequences/TAIR10_blastsets/TAIR10_cdna_20101214_updated'
 index="./Auxiliary_files/$(basename $url)"
 fasta="./Auxiliary_files/${index}.fasta"
-reads=(./RNA-seq/Raw_sequences/*mRNA.fastq.gz) #The "raw" sequences are already trimmed and have a good quality.
+reads=(./RNA-seq/Processed_sequences/*mRNA.fastq.gz)
 outdir='./RNA-seq/kallisto_results'
 
 #Downloading the TAIR10 transcriptome from the TAIR site
@@ -16,7 +16,7 @@ kallisto index -i $index $fasta
 
 #Quantifying transcript abundances with kallisto
 
-p=$(egrep -c ^processor /proc/cpuinfo)
+p=$(egrep -c '^processor' '/proc/cpuinfo')
 
 for i in $reads
   do
@@ -25,7 +25,7 @@ for i in $reads
 
 #Normalizing transcript abundances with sleuth
 
-Rscript "./Scripts/PCE_sleuth.R"
+Rscript './Scripts/PCE_sleuth.R'
 
 #Annotating the count table
 
