@@ -1210,7 +1210,7 @@ sub write_R_script {
     print R "colors <- c(\"red\", \"violet\", \"orange\", \"green\", \"tan\")\n";
     print R "color <- colors[c+1]\n";
 #    print R "pdf(file=args[2])\n";
-    print R "png(file=args[2], pointsize=10, width=5, height=5, units=\"in\", res=600, type=\"cairo-png\")\n";
+    print R "png(file=args[2], pointsize=10, width=5, height=5, units=\"in\", res=300, type=\"cairo-png\")\n";
     print R "par(mar=c(4,4,4,2), cex.axis=0.8, cex.lab=0.8, cex.main=0.8)\n";
     print R "plot(data\$Position, data\$All, type=\"p\", pch=16, col=rgb(0,0,0, alpha=0.3), xlab=\"Transcript Position [nt]\", ylab=\"Degradome 5\' end Frequency\")\n";
     print R "title(main, adj=0)\n";
