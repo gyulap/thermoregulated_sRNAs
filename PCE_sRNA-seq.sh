@@ -22,6 +22,7 @@ samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print s
 #Differential expression of the sRNA loci with DESeq2
 
 Rscript ./Scripts/PCE_DESeq2.R
+Rscript ./Scripts/PCE_MA-plot.R
 
 #Creating the expression table of all the thermoregulated sRNA loci
 
