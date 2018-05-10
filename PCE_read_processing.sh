@@ -25,8 +25,8 @@ while read line
       ;;
       'OTHER')
         out='./Degradome-seq/Raw_sequences'
-        m=20
-        M=21
+        m=18
+        M=35
       ;;
       'RNA-Seq')
         out='./RNA-seq/Raw_sequences'
