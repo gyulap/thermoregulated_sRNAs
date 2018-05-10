@@ -47,10 +47,8 @@ while read line
     
     if [[ ($Assay_type == 'miRNA-Seq') ||  ($Assay_type == 'OTHER') ]]; then
       cutadapt -j $p -a 'TGGAATTCTCGGGTGCCAAGG' -m $m -M $M -q 20 --max-n=0 --discard-untrimmed $rawname | pigz -p $p > $procname
-#Processing of the RNA-seq reads is not necessary, because they are already trimmed and their quality is good.
-#However, one can apply a quality filtering by uncommenting the lines below, if necessary.
-#    elif [[ $Assay_type == 'RNA-Seq' ]]; then
-#      cutadapt -j $p -q 20 --max-n=0 $rawname | pigz -p $p > $procname
+    elif [[ $Assay_type == 'RNA-Seq' ]]; then
+      cutadapt -j $p -q 20 --max-n=0 $rawname | pigz -p $p > $procname
     fi
 
     fastqc -t $p -o "${out%/*}/Processed_sequences/FastQC_processed_sequences" $procname
