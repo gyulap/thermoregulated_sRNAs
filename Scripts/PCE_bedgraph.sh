@@ -9,7 +9,8 @@ rgfile="${outdir}/ShortStack_results/rg_list.txt"
 while read rg
   do
     mergedrg="${rg%_1_sRNA_processed}"
-    normfactor=$(samtools view -c -F4 -L $annotfile -r ${mergedrg}* $bamfile | awk -v mergedrg="$mergedrg" '{printf "%s\t%.4f\n", mergedrg, 1000000/$0}' >> "${outdir}/norm_factors_merged_RPM.txt")
+    normfactor=$(samtools view -c -F4 -L $annotfile -r ${mergedrg}* $bamfile | awk '{printf "%.4f\n", 1000000/$0}')
+    printf "%s\t%.4f\n" $mergedrg $normfactor >> "${outdir}/norm_factors_merged_RPM.txt"
     temperature="${mergedrg#*_}"
 
 # Sets the track colors by temperature. Color codes are RGB (Red, Green, Blue).
