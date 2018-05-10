@@ -2,14 +2,23 @@
 
 p=$(egrep -c '^processor' '/proc/cpuinfo')
 m=$(egrep 'MemTotal' '/proc/meminfo' | awk '{if ($1 > 1048576) {printf "%iK\n", $2/8} else {print "768M"} }')
-genomefile="./Auxiliary_files/TAIR10_chr_all.fa"
-outdir="./sRNA-seq/ShortStack_results"
+genomefile='./Auxiliary_files/TAIR10_chr_all.fa'
+outdir='./sRNA-seq/ShortStack_results'
 reads=(./sRNA-seq/Processed_sequences/*processed.fastq.gz)
 
 #Prediction and characterization of sRNA loci with ShortStack
 
 ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m
-samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > 'rg_list.txt'
+samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
+
+#Creating the mapping statistics (Table S1A)
+
+./Scripts/PCE_sRNA_mapping_statistics.sh
+
+#Differential expression of the sRNA loci with DESeq2
+
+Rscript './Scripts/PCE_DESeq2.R'
+Rscript './Scripts/PCE_MA-plot.R'
 
 #Extract the main miRNA and miRNA* sequences from ShortStack-predicted miRNA loci
 
@@ -18,11 +27,6 @@ samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print s
 #Creating genome browser track for the 24-nt sRNAs from the ShortStack alignment file
 
 ./Scripts/PCE_bedgraph.sh
-
-#Differential expression of the sRNA loci with DESeq2
-
-Rscript ./Scripts/PCE_DESeq2.R
-Rscript ./Scripts/PCE_MA-plot.R
 
 #Creating the expression table of all the thermoregulated sRNA loci
 

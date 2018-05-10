@@ -9,7 +9,7 @@ for i in 'sRNA-seq' 'Degradome-seq' 'RNA-seq'
 
 #Determining the number of cores on the computer to set the number of threads for adapter trimming.
 
-p=$(grep -c ^processor /proc/cpuinfo)
+p=$(grep -c '^processor' '/proc/cpuinfo')
 
 while read line
   do
