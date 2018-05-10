@@ -2,9 +2,9 @@
 
 globalqc=("Unprocessed" "Passed" "Discarded" "Mapped" "Unmapped" "Uniquely mapped" "Multi-mapped")
 red=("Redundant" "Non-Redundant")
-bamfile='./sRNA-seq/ShortStack_results/merged_alignments.bam'
-rgfile='./sRNA-seq/ShortStack_results/rg_list.txt'
-outputfile='Table_S1A.txt'
+bamfile="./sRNA-seq/ShortStack_results/merged_alignments.bam"
+rgfile="./sRNA-seq/ShortStack_results/rg_list.txt"
+outputfile="./sRNA-seq/Table_S1A.txt"
 
 {
  printf "%s\n\n" 'Table S1A - Mapping statistics of the small RNA libraries'

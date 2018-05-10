@@ -1,5 +1,8 @@
 #! /usr/bin/zsh
 
+mydir=$PWD
+cd './sRNA-seq/ShortStack_results'
+
 #Extracting all the unique sequences from the ShortStack alignment file considering only the mapped reads and sorting them by total abundance.
 
 samtools fasta -F4 'merged_alignments.bam' |\
@@ -51,4 +54,6 @@ for i in *NR.txt
 
 paste 'NR_sequences.txt' Seedling*NR2.txt Root*NR2.txt Leaf*NR2.txt Flower*NR2.txt > 'Raw_count_table.txt'
 
-rm -f *NR* 'rg_list.txt'
+rm -f *NR*
+
+cd $mydir
