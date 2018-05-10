@@ -249,8 +249,8 @@ while (<G>) {
     $chance = $deg_header{$cat} / $deg_header{'tx_ef_size'};
     $p_val = 1 - (pbinom(0,$rank,$chance));
     $slice_site = "$gfields[1]" . ":" . "$gfields[4]";
-#    if(($p_val <= $opt_p) and ($cat_digit <= $opt_c)) {
-    if(($p_val <= $opt_p) and ($cat_digit == $opt_c)) {
+    if(($p_val <= $opt_p) and ($cat_digit <= $opt_c)) {
+#    if(($p_val <= $opt_p) and ($cat_digit == $opt_c)) {
 	# check for redundancy
 	if(exists($nr_tabular{$slice_site})) {
 	    my @old_fields = split ("\t", $nr_tabular{$slice_site});
