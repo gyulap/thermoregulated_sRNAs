@@ -38,7 +38,7 @@ while read line
 
 #Downloading raw sequences from the SRA database, renaming them by the sample name and placing them into the appropriate directory.
 
-    echo "Downloading $Run ${Sample_Name}.fastq.gz from SRA"
+    echo "Downloading $Run (${Sample_Name}) from SRA"
 
     fastq-dump --gzip $Run -Z > $rawname
 
