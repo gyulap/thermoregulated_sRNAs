@@ -3,11 +3,11 @@
 outdir='./Degradome-seq'
 degreads="${outdir}/All_degradome_merged.fasta"
 mirnas='./sRNA-seq/ShortStack_results/MIRNAs/miRBase_ShortStack_main_collapsed.fasta'
-transcrips='./Auxiliary_files/TAIR10_noMIR_cdna_simplified.fasta'
+transcripts='./Auxiliary_files/TAIR10_noMIR_cdna_simplified.fasta'
 
 #Preparing input files for Cleaveland
 
-gunzip './Auxiliary_files/TAIR10_noMIR_cdna_simplified.fasta.gz'
+gunzip "${transcripts}.gz"
 gunzip -c ${outdir}/Processed_sequences/*.fastq.gz | sed -n '2~4p' | awk '{count++; print ">deg_"count"\n"$0}' > $degreads
 
 #Performing degradome analysis for all miRNAs. Only category 0, 1, and 2 are considered.
