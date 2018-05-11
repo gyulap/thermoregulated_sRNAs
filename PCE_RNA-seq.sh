@@ -8,19 +8,27 @@ outdir='./RNA-seq/kallisto_results'
 
 #Downloading the TAIR10 transcriptome from the TAIR site
 
-wget -q $url -O $fasta
+if [[ ! -f $fasta ]]; then
+  wget -q $url -O $fasta
+fi
 
 #Making the kallisto index for pseudoalignment
 
-kallisto index -i $index $fasta
+if [[ ! -f $index ]]; then
+  kallisto index -i $index $fasta
+fi
 
 #Quantifying transcript abundances with kallisto
 
 p=$(egrep -c '^processor' '/proc/cpuinfo')
 
+if [[ ! -d './RNA-seq/kallisto_results/kallisto_files' ]]; then
+  mkdir -p './RNA-seq/kallisto_results/kallisto_files'
+fi
+
 for i in $reads
   do
-    kallisto quant -i $index -b 100 --single -l 200 -s 20 -t $p -o "${outdir}/kallisto_files/${${i%_mRNA.fastq.gz}##*/}" $i
+    kallisto quant -i $index -b 100 --single -l 200 -s 20 -t $p -o "${outdir}/kallisto_files/${${i%_mRNA_processed.fastq.gz}##*/}" $i
   done
 
 #Normalizing transcript abundances with sleuth
