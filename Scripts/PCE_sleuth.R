@@ -1,7 +1,7 @@
 setwd("./RNA-seq/kallisto_results")
 
 library(sleuth)
-base_dir = "./RNA-seq/kallisto_results/kallisto_files"
+base_dir = "./kallisto_files"
 #ann = read.table("/home/gyulap/Dokumentumok/Arabidopsis/Gyuri_temperature/kallisto/TAIR10_functional_descriptions_20140331.txt",
 #                 sep="\t", header = F, fill = T, row.names = NULL, quote = "", stringsAsFactors = F)
 sample_id = dir(file.path(base_dir))
