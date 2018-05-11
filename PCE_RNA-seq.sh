@@ -2,8 +2,8 @@
 
 url='https://www.arabidopsis.org/download_files/Sequences/TAIR10_blastsets/TAIR10_cdna_20101214_updated'
 index="./Auxiliary_files/$(basename $url)"
-fasta="./Auxiliary_files/${index}.fasta"
-reads=(./RNA-seq/Processed_sequences/*mRNA.fastq.gz)
+fasta="${index}.fasta"
+reads=(./RNA-seq/Processed_sequences/*mRNA_processed.fastq.gz)
 outdir='./RNA-seq/kallisto_results'
 
 #Downloading the TAIR10 transcriptome from the TAIR site
