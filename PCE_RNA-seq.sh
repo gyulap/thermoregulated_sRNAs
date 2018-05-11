@@ -38,8 +38,15 @@ Rscript './Scripts/PCE_sleuth.R'
 #Annotating the count table
 
 awk 'BEGIN{FS=OFS="\t"}
-     NR==FNR{a[$1]=$3; next}
-     {split($1, s, "[.]");
-      if (FNR==1 || s[1] in a)
-        {print $0, a[s[1]]}
-     }' "./Auxiliary_files/TAIR10_functions_simplified.txt" "${outdir}/kallisto_isoform_table.txt" > "${outdir}/kallisto_isoform_table_annotated.txt"
+     NR==FNR{a[$4]=$8"\t"$9"\t"$10"\t"$11"\t"$12; next}
+     {split($1, b, "."); s = b[1];
+     if ($1 == "target_id") {
+       print $0"\tAnnotation1\tAnnotation2\tAnnotation3\tAnnotation4\tAnnotation5"
+     }
+     else if (s in a) {
+       print $0, a[s]
+     }
+     else {
+       print $0"\tNA\tNA\tNA\tNA\tNA"
+     }
+     }' './Auxiliary_files/TAIR10_genes_annotated8.bed' "${outdir}/kallisto_isoform_table.txt" > "${outdir}/kallisto_isoform_table_annotated.txt"
