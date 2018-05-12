@@ -38,7 +38,7 @@ Rscript './Scripts/PCE_sleuth.R'
 #Annotating the count table
 
 awk 'BEGIN{FS=OFS="\t"}
-     NR==FNR{a[$4]=$8"\t"$9"\t"$10"\t"$11"\t"$12; next}
+     NR==FNR{a[$1]=$2"\t"$3"\t"$4"\t"$5"\t"$6; next}
      {split($1, b, "."); s = b[1];
      if ($1 == "target_id") {
        print $0"\tAnnotation1\tAnnotation2\tAnnotation3\tAnnotation4\tAnnotation5"
@@ -49,4 +49,4 @@ awk 'BEGIN{FS=OFS="\t"}
      else {
        print $0"\tNA\tNA\tNA\tNA\tNA"
      }
-     }' './Auxiliary_files/TAIR10_genes_annotated8.bed' "${outdir}/kallisto_isoform_table.txt" > "${outdir}/kallisto_isoform_table_annotated.txt"
+     }' './Auxiliary_files/TAIR10_functions_simplified.txt' "${outdir}/kallisto_isoform_table.txt" > "${outdir}/kallisto_isoform_table_annotated.txt"
