@@ -5,6 +5,8 @@ index="./Auxiliary_files/$(basename $url)"
 fasta="${index}.fasta"
 reads=(./RNA-seq/Processed_sequences/*mRNA_processed.fastq.gz)
 outdir='./RNA-seq/kallisto_results'
+annotfile='./Auxiliary_files/TAIR10_functions_simplified.txt'
+kallisto_output="${outdir}/kallisto_isoform_table.txt"
 
 #Downloading the TAIR10 transcriptome from the TAIR site
 
@@ -49,4 +51,4 @@ awk 'BEGIN{FS=OFS="\t"}
      else {
        print $0"\tNA\tNA\tNA\tNA\tNA"
      }
-     }' './Auxiliary_files/TAIR10_functions_simplified.txt' "${outdir}/kallisto_isoform_table.txt" > "${outdir}/kallisto_isoform_table_annotated.txt"
+     }' $annotfile $kallisto_output > "${kallisto_output%.txt}_annotated.txt"
