@@ -19,6 +19,7 @@ fi
 
 if [[ ! -f "${outdir}/merged_alignments.bam" ]]; then
   ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m --bowtie_m 1000 --mincov 5 --ranmax 'none'
+  awk 'BEGIN{FS=OFS="\t"}{if (NR == 1 || $2 ~ /Cluster/) {print $0}}' 'Counts.txt' > 't' && mv -f 't' 'Counts.txt'
   samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
 fi
 
