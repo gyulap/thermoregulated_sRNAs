@@ -17,27 +17,27 @@ fi
 
 #Prediction and characterization of sRNA loci with ShortStack
 
-if [[ -f ! "${outdir}/merged_alignments.bam" ]]; then
+if [[ ! -f "${outdir}/merged_alignments.bam" ]]; then
   ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m
   samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
 fi
 
 #Creating the mapping statistics (Table S1A)
 
-if [[ -f ! "${outdir}/Table_S1A.txt" ]]; then
+if [[ ! -f "${outdir}/Table_S1A.txt" ]]; then
   ./Scripts/PCE_sRNA_mapping_statistics.sh
 fi
 
 #Extract the main miRNA and miRNA* sequences from ShortStack-predicted miRNA loci
 #and merging them with the miRBase miRNAs
 
-if [[ -d "${outdir}/MIRNAs" ]]; then
+if [[ ! -f "${outdir}/MIRNAs/Main_miRNAs_collapsed.fasta" ]]; then
   ./Scripts/PCE_extract_main_miRNAs_from_ShortStack_MIRNA_files.sh
 fi
 
 #Creating a sequence count table from the ShortStack alignment file
 
-if [[ -f ! "${outdir}/Raw_count_table.txt" ]]; then
+if [[ ! -f "${outdir}/Raw_count_table.txt" ]]; then
   ./Scripts/PCE_Raw_count_table.sh
 fi
 
@@ -50,7 +50,7 @@ fi
 
 #Differential expression of the sRNA loci with DESeq2
 
-if [[ -f "${outdir}/Counts.txt" ]]; then
+if [[ ! -d "${outdir}/DESeq2" ]]; then
   Rscript './Scripts/PCE_DESeq2.R'
   Rscript './Scripts/PCE_MA-plot.R'
 fi
@@ -69,7 +69,7 @@ fi
 
 #Creating genome browser track for the 24-nt sRNAs from the ShortStack alignment file
 
-if [[ -d ! "${outdir}/Genome_browser_tracks" ]]; then
+if [[ ! -d "${outdir}/Genome_browser_tracks" ]]; then
   ./Scripts/PCE_bedgraph.sh
 fi
 
