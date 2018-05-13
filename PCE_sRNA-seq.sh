@@ -24,7 +24,7 @@ fi
 
 #Creating the mapping statistics (Table S1A)
 
-if [[ -f "${outdir}/merged_alignments.bam" ]]; then
+if [[ -f ! "${outdir}/Table_S1A.txt" ]]; then
   ./Scripts/PCE_sRNA_mapping_statistics.sh
 fi
 
@@ -37,7 +37,7 @@ fi
 
 #Creating a sequence count table from the ShortStack alignment file
 
-if [[ -f "${outdir}/merged_alignments.bam" ]]; then
+if [[ -f ! "${outdir}/Raw_count_table.txt" ]]; then
   ./Scripts/PCE_Raw_count_table.sh
 fi
 
@@ -69,7 +69,9 @@ fi
 
 #Creating genome browser track for the 24-nt sRNAs from the ShortStack alignment file
 
-./Scripts/PCE_bedgraph.sh
+if [[ -d ! "${outdir}/Genome_browser_tracks" ]]; then
+  ./Scripts/PCE_bedgraph.sh
+fi
 
 #Creating heatmaps and expression tables of the 24-nt siRNA loci
 
