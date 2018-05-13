@@ -19,7 +19,7 @@ outputfile="./sRNA-seq/ShortStack_results/Table_S1A.txt"
 while read rg
   do
     {
-    printf "%s" $(echo ${rg%_*_processed} | sed 's/_/ /g;s/\(\(^.*[0-9][0-9] \)\([12]$\)/\1°C\2/'); printf "%s\t" ""
+    printf "%s" $(echo ${rg%_*_processed} | sed 's/_/ /g;s/\(^.*[0-9][0-9] \)\([12]$\)/\1°C\2/'); printf "%s\t" ""
     total_unprocessed_R=$(gunzip -c "./sRNA-seq/Raw_sequences/${rg%_processed}_raw.fastq.gz" | sed -n '2~4p' | wc -l)
     printf "%.0f\t" $total_unprocessed_R
     awk -v unproc="$total_unprocessed_R" '
