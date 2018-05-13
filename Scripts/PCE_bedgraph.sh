@@ -6,14 +6,14 @@ outdir='./sRNA-seq/ShortStack_results'
 bamfile="${outdir}/merged_alignments.bam"
 rgfile="${outdir}/rg_list.txt"
 
-if [[ -d "${outdir}/Genome_browser_tracks" ]]; then
+if [[ ! -d "${outdir}/Genome_browser_tracks" ]]; then
   mkdir "${outdir}/Genome_browser_tracks"
 fi
 
 while read rg
   do
     mergedrg="${rg%_1_sRNA_processed}"
-    normfactor=$(samtools view -c -F4 -L $annotfile -r ${mergedrg}* $bamfile | awk '{printf "%.4f\n", 1000000/$0}')
+    normfactor=$(samtools view -F4 -L $annotfile $bamfile | egrep -c $mergedrg | awk '{printf "%.4f\n", 1000000/$0}')
     printf "%s\t%.4f\n" $mergedrg $normfactor >> "${outdir}/norm_factors_merged_RPM.txt"
     temperature="${mergedrg#*_}"
 
