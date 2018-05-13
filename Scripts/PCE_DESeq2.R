@@ -12,8 +12,9 @@ fc = 1.5
 bm = 10
 fdr = 0.05
 
-input_data = read.table("Counts.txt", header=T, sep="\t", row.names=2, fill=T)
+input_data = read.table("Counts.txt", header=T, sep="\t", row.names=NULL, fill=T)
 input_data = input_data[!is.na(input_data$Name),]
+rownames(input_data) = input_data$Name
 
 library(DESeq2)
 
