@@ -26,7 +26,7 @@ while read rg
              }
       END{for (i in a)
            {print i"\t"a[i]}
-         }' > "${rg%_sRNA_filtered}_NR.txt"
+         }' > "${rg%_sRNA_processed}_NR.txt"
   done < 'rg_list.txt'
 
 #Making a new sequence count table for every sample that matches the sequence content and order in the total unique sequence table.

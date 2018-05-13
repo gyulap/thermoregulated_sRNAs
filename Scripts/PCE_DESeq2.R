@@ -3,9 +3,7 @@ library(dplyr)
 setwd("./sRNA-seq/ShortStack_results")
 
 outdir = paste0(getwd(), "/DESeq2")
-filtdir = paste0(outdir, "/Filtered")
 dir.create(outdir)
-dir.create(filtdir)
 
 tissues = c("Seedling", "Root", "Leaf", "Flower")
 conditions = c("15", "21", "27")
@@ -26,7 +24,7 @@ DESeq2.test = function(ref, cond) {
   results = results(dds, contrast = c("condition", cond, ref),
                     alpha = fdr, lfcThreshold = log2(fc), altHypothesis = "greaterAbs", independentFiltering = T)
   results = lfcShrink(dds, contrast = c("condition", cond, ref), res = results)
-  outfilename = paste0(outdir, "/DESeq2_results_", ref, "_to_", cond, "_", tissue, "_", timestamp, ".txt")
+  outfilename = paste0(outdir, "/DESeq2_results_", ref, "_to_", cond, "_", tissue, ".txt")
   results = as.data.frame(results)
   results$Name = rownames(results)
   results = results[, c(ncol(results), 1:(ncol(results)-1))]
@@ -68,15 +66,15 @@ for (tissue in tissues) {
   }
 
 write.table(normcounts,
-            file=paste0(outdir, "/DESeq2_norm_counts_", timestamp, ".txt"),
+            file=paste0(outdir, "/DESeq2_norm_counts.txt"),
             sep = "\t", quote = F, row.names = F, col.names = T)
 
 write.table(mapping[2:nrow(mapping),],
-            file=paste0(outdir, "/DESeq2_norm_colData_", timestamp, ".txt"),
+            file=paste0(outdir, "/DESeq2_norm_colData.txt"),
             sep = "\t", quote = F, row.names = F, col.names = T)
 
 write.table(sf[2:nrow(sf),],
-            file=paste0(outdir, "/DESeq2_norm_factors_", timestamp, ".txt"),
+            file=paste0(outdir, "/DESeq2_norm_factors.txt"),
             sep = "\t", quote = F, row.names = F, col.names = T)
 
 rm(list=ls())

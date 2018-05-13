@@ -4,7 +4,7 @@ annotfile='./Auxiliary_files/TAIR10_fornorm.bed'
 genomefile='./Auxiliary_files/TAIR10_chr_all.txt'
 outdir='./sRNA-seq/ShortStack_results'
 bamfile="${outdir}/merged_alignments.bam"
-rgfile="${outdir}/ShortStack_results/rg_list.txt"
+rgfile="${outdir}/rg_list.txt"
 
 if [[ -d "${outdir}/Genome_browser_tracks" ]]; then
   mkdir "${outdir}/Genome_browser_tracks"
