@@ -17,26 +17,30 @@ fi
 
 #Prediction and characterization of sRNA loci with ShortStack
 
-ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m
-samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
+if [[ -f ! "${outdir}/merged_alignments.bam" ]]; then
+  ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m
+  samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
+fi
 
-&&
 #Creating the mapping statistics (Table S1A)
 
-./Scripts/PCE_sRNA_mapping_statistics.sh
+if [[ -f "${outdir}/merged_alignments.bam" ]]; then
+  ./Scripts/PCE_sRNA_mapping_statistics.sh
+fi
 
-&&
 #Extract the main miRNA and miRNA* sequences from ShortStack-predicted miRNA loci
 #and merging them with the miRBase miRNAs
 
-./Scripts/PCE_extract_main_miRNAs_from_ShortStack_MIRNA_files.sh
+if [[ -d "${outdir}/MIRNAs" ]]; then
+  ./Scripts/PCE_extract_main_miRNAs_from_ShortStack_MIRNA_files.sh
+fi
 
-&&
 #Creating a sequence count table from the ShortStack alignment file
 
-./Scripts/PCE_Raw_count_table.sh
+if [[ -f "${outdir}/merged_alignments.bam" ]]; then
+  ./Scripts/PCE_Raw_count_table.sh
+fi
 
-&&
 #Getting the miRNA counts
 
 
@@ -46,10 +50,11 @@ samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print s
 
 #Differential expression of the sRNA loci with DESeq2
 
-Rscript './Scripts/PCE_DESeq2.R'
-Rscript './Scripts/PCE_MA-plot.R'
+if [[ -f "${outdir}/Counts.txt" ]]; then
+  Rscript './Scripts/PCE_DESeq2.R'
+  Rscript './Scripts/PCE_MA-plot.R'
+fi
 
-&&
 #Creating the expression table of all the thermoregulated sRNA loci
 
 
