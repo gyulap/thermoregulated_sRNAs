@@ -29,7 +29,7 @@ for p in *_[35]p.txt
     cat $p | sort -k 1,1r | awk 'BEGIN{FS=OFS="\t"}{gsub("U", "T", $2); gsub("u", "t", $2); print ">"$1"\n"$2}' >> 'Main_miRNAs.fasta'
   done
 
-awk 'BEGIN{RS=">";FS="\n"}{a[$2]=a[$2]","$1}END{for (t in a) {gsub("^,", "", a[t]); print ">"a[t]"\n"t}}' 'Main_miRNAs.fasta' > 'Main_miRNAs_collapsed.fasta'
+awk 'BEGIN{RS=">";FS="\n"}NR>1{a[$2]=a[$2]","$1}END{for (t in a) {gsub("^,", "", a[t]); print ">"a[t]"\n"t}}' 'Main_miRNAs.fasta' > 'Main_miRNAs_collapsed.fasta'
 
 rm -f *_5p.txt *_3p.txt
 
