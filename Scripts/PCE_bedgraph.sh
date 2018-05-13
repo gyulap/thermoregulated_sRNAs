@@ -6,6 +6,10 @@ outdir='./sRNA-seq/ShortStack_results'
 bamfile="${outdir}/merged_alignments.bam"
 rgfile="${outdir}/ShortStack_results/rg_list.txt"
 
+if [[ -d "${outdir}/Genome_browser_tracks" ]]; then
+  mkdir "${outdir}/Genome_browser_tracks"
+fi
+
 while read rg
   do
     mergedrg="${rg%_1_sRNA_processed}"
@@ -35,6 +39,6 @@ while read rg
         trackline="track type=bedGraph name=\"${trackname}\" visibility=full color=${color} graphType=bar viewLimits=-200.0:200.0"
         plus=$(bedtools genomecov -bg -strand + -ibam <(samtools view -bu -r ${mergedrg}* $bamfile | bamtools filter -length $readlength;) -g $genomefile -scale $normfactor;)
         minus=$(bedtools genomecov -bg -strand - -ibam <(samtools view -bu -r ${mergedrg}* $bamfile | bamtools filter -length $readlength;) -g $genomefile -scale $normfactor | awk 'BEGIN{FS=OFS="\t"}{$4=-$4; print $0}';)
-        cat <(echo $plus;) <(echo $minus;) | bedtools sort | sed "1i$trackline" > "${outdir}/${mergedrg}_${readlength}nt_norm.bedgraph"
+        cat <(echo $plus;) <(echo $minus;) | bedtools sort | sed "1i$trackline" > "${outdir}/Genome_browser_tracks/${mergedrg}_${readlength}nt_norm.bedgraph"
       done
   done < <(egrep '_1_' $rgfile)

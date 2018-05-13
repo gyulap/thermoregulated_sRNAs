@@ -14,10 +14,6 @@ awk '
         {print i}
      }' > 'NR_sequences.txt'
 
-#Getting the read group (sample) names.
-
-samtools view -H 'merged_alignments.bam' | awk '/^@RG/{gsub("@RG\tID:", "", $0); print $0}' > 'rg_list.txt'
-
 #Counting every unique sequences per samples.
 
 while read rg
