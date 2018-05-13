@@ -18,7 +18,7 @@ fi
 #Prediction and characterization of sRNA loci with ShortStack
 
 if [[ ! -f "${outdir}/merged_alignments.bam" ]]; then
-  ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m
+  ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m --bowtie_m 1000 --mincov 5
   samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
 fi
 
