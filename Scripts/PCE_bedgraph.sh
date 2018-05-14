@@ -33,12 +33,9 @@ while read rg
 
 # Creates the tracks for every readlength, positive and negative strands separately and then merges them into one track file.
 
-    for readlength in {24..24}
-      do
-        trackname="$(echo ${mergedrg} | sed 's/\(^.*\)_\([0-9]\{2\}\)/\1 \2 °C/') ${readlength}nt"
-        trackline="track type=bedGraph name=\"${trackname}\" visibility=full color=${color} graphType=bar viewLimits=-200.0:200.0"
-        plus=$(bedtools genomecov -bg -strand + -ibam <(samtools view -bu -r ${mergedrg}* $bamfile | bamtools filter -length $readlength;) -g $genomefile -scale $normfactor;)
-        minus=$(bedtools genomecov -bg -strand - -ibam <(samtools view -bu -r ${mergedrg}* $bamfile | bamtools filter -length $readlength;) -g $genomefile -scale $normfactor | awk 'BEGIN{FS=OFS="\t"}{$4=-$4; print $0}';)
-        cat <(echo $plus;) <(echo $minus;) | bedtools sort | sed "1i$trackline" > "${outdir}/Genome_browser_tracks/${mergedrg}_${readlength}nt_norm.bedgraph"
-      done
+    trackname="$(echo ${mergedrg} | sed 's/\(^.*\)_\([0-9]\{2\}\)/\1 \2 °C/') 24nt"
+    trackline="track type=bedGraph name=\"${trackname}\" visibility=full color=${color} graphType=bar viewLimits=-200.0:200.0"
+    plus=$(bedtools genomecov -bg -strand + -ibam <(samtools view -F4 $bamfile | awk -v mergedrg="$mergedrg" 'BEGIN{FS=OFS="\t"}{if ($1 ~ /^@/ || ($0 ~ mergedrg && length($10) == 24)) {print $0}}' | samtools view -bu;) -g $genomefile -scale $normfactor;)
+    minus=$(bedtools genomecov -bg -strand - -ibam <(samtools view -F4 $bamfile | awk -v mergedrg="$mergedrg" 'BEGIN{FS=OFS="\t"}{if ($1 ~ /^@/ || ($0 ~ mergedrg && length($10) == 24)) {print $0}}' | samtools view -bu;) -g $genomefile -scale $normfactor | awk 'BEGIN{FS=OFS="\t"}{$4=-$4; print $0}';)
+    cat <(echo $plus;) <(echo $minus;) | bedtools sort | sed "1i$trackline" > "${outdir}/Genome_browser_tracks/${mergedrg}_${readlength}nt_norm.bedgraph"
   done < <(egrep '_1_' $rgfile)
