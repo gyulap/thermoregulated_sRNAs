@@ -37,5 +37,5 @@ while read rg
     trackline="track type=bedGraph name=\"${trackname}\" visibility=full color=${color} graphType=bar viewLimits=-200.0:200.0"
     plus=$(bedtools genomecov -bg -strand + -ibam <(samtools view -h -F4 $bamfile | awk -v mergedrg="$mergedrg" 'BEGIN{FS=OFS="\t"}{if ($1 ~ /^@/ || ($0 ~ mergedrg && length($10) == 24)) {print $0}}' | samtools view -bu;) -g $genomefile -scale $normfactor;)
     minus=$(bedtools genomecov -bg -strand - -ibam <(samtools view -h -F4 $bamfile | awk -v mergedrg="$mergedrg" 'BEGIN{FS=OFS="\t"}{if ($1 ~ /^@/ || ($0 ~ mergedrg && length($10) == 24)) {print $0}}' | samtools view -bu;) -g $genomefile -scale $normfactor | awk 'BEGIN{FS=OFS="\t"}{$4=-$4; print $0}';)
-    cat <(echo $plus;) <(echo $minus;) | bedtools sort | sed "1i$trackline" > "${outdir}/Genome_browser_tracks/${mergedrg}_${readlength}nt_norm.bedgraph"
+    cat <(echo $plus;) <(echo $minus;) | bedtools sort | sed "1i$trackline" > "${outdir}/Genome_browser_tracks/${mergedrg}_24nt_norm.bedgraph"
   done < <(egrep '_1_' $rgfile)
