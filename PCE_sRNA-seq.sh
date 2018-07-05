@@ -1,5 +1,7 @@
 #!/usr/bin/zsh
 
+set -ueo pipefail
+
 p=$(egrep -c '^processor' '/proc/cpuinfo')
 m=$(egrep 'MemTotal' '/proc/meminfo' | awk '{if ($1 > 1048576) {printf "%iK\n", $2/8} else {print "768M"} }')
 url='https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_chromosome_files/TAIR10_chr_all.fas'
@@ -18,7 +20,7 @@ fi
 #Prediction and characterization of sRNA loci with ShortStack
 
 if [[ ! -f "${outdir}/merged_alignments.bam" ]]; then
-  ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m --mincov 2 --bowtie_m 1000
+  ShortStack --genomefile $genomefile --readfile $reads --outdir $outdir --bowtie_cores $p --sort_mem $m --bowtie_m 1000
   awk 'BEGIN{FS=OFS="\t"}{if (NR == 1 || $2 ~ /Cluster/) {print $0}}' "${outdir}/Counts.txt" > 't' && mv -f 't' "${outdir}/Counts.txt"
   samtools view -H "${outdir}/merged_alignments.bam" | awk -F "\t" '/^@RG/{print substr($2, 4, length($2))}' > "${outdir}/rg_list.txt"
 fi
@@ -46,7 +48,7 @@ fi
 
 
 
-#Creating heatmap and expression table of the thermoregulated miRNAs
+#Creating expression table of the thermoregulated miRNAs
 
 
 #Differential expression of the sRNA loci with DESeq2
@@ -60,20 +62,28 @@ fi
 
 
 
-#Creating heatmaps and expression tables of the 21-nt phasiRNA-producing loci
+#Creating expression tables of the 21-nt phasiRNA-producing loci
+
 
 
 #Determining the phase initiating miRNA for the phasiRNA-producing loci
 
-#PhaseTank --genome '.Auxiliary_files/TAIR10_chr_all.fa' --lib '21nt_NR.fasta' --miR $mirnas --degradome $degreads --trigger --size 21 --dir './sRNA-seq/PhaseTank_results'
+PhaseTank --genome '.Auxiliary_files/TAIR10_chr_all.fa' --lib '21nt_NR.fasta' --miR $mirnas --degradome $degreads --trigger --size 21 --dir './sRNA-seq/PhaseTank_results'
 
+
+#Creating expression tables of the 24-nt siRNA loci
+
+
+#Creating heatmaps for the different sRNA classes
+
+if [[ -f 'PCE_Table S2 - Expression of sRNAs.xlsx' ]]; then
+  Rscript './Scripts/PCE_heatmaps.R miRNAs'
+  Rscript './Scripts/PCE_heatmaps.R phasiRNAs'
+  Rscript './Scripts/PCE_heatmaps.R hcsiRNAs'
+fi
 
 #Creating genome browser track for the 24-nt sRNAs from the ShortStack alignment file
 
 if [[ ! -d "${outdir}/Genome_browser_tracks" ]]; then
   ./Scripts/PCE_bedgraph.sh
 fi
-
-#Creating heatmaps and expression tables of the 24-nt siRNA loci
-
-
